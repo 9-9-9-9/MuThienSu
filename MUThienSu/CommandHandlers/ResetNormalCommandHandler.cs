@@ -29,7 +29,7 @@ namespace MUThienSu.CommandHandlers
 
             if (args.Length == 0)
             {
-                await ResetVipAsync(0, 0, 0, 0);
+                await ResetNormalAsync(0, 0, 0, 0);
             }
             else
             {
@@ -40,7 +40,7 @@ namespace MUThienSu.CommandHandlers
 
                 TryUpdatePointValue(ref str, ref agi, ref vit, ref ene);
 
-                await ResetVipAsync(str, agi, vit, ene);
+                await ResetNormalAsync(str, agi, vit, ene);
             }
         }
     }

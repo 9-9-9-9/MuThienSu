@@ -47,6 +47,8 @@ namespace MUThienSu
             {
                 // ReSharper disable once PossibleNullReferenceException
                 await instance.ExecuteAsync(args.Skip(3).ToArray());
+                Console.WriteLine("Success");
+                Console.ReadLine();
             }
             catch (Exception e)
             {
