@@ -43,8 +43,17 @@ namespace MUThienSu
                 character
             }) as ICommandHandler;
 
-            // ReSharper disable once PossibleNullReferenceException
-            await instance.ExecuteAsync(args.Skip(3).ToArray());
+            try
+            {
+                // ReSharper disable once PossibleNullReferenceException
+                await instance.ExecuteAsync(args.Skip(3).ToArray());
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                Console.ReadLine();
+                throw;
+            }
         }
 
         private static void Exit(string msg, int exitCode = 0)
