@@ -14,6 +14,7 @@ namespace MUThienSu
         internal static async Task Main(string[] args)
         {
             Register<ResetVipCommandHandler>("reset-vip");
+            Register<ResetNormalCommandHandler>("reset");
             Register<AddPointCommandHandler>("add-point");
             
             if (args.Length < 3)

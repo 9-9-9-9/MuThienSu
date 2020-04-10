@@ -134,7 +134,7 @@ namespace MUThienSu.CommandHandlers
             await Task.CompletedTask;
         }
 
-        protected async Task ResetVipAsync()
+        protected async Task ResetVipAsync(int str, int agi, int vit, int ene)
         {
             Console.WriteLine(nameof(ResetVipAsync));
             var client =
@@ -162,7 +162,44 @@ namespace MUThienSu.CommandHandlers
                 Console.Error.WriteLine("Kiem tra sau reset that bai");
                 Console.Error.WriteLine(e);
                 Console.Error.WriteLine("Kiem tra sau reset that bai");
+                return;
             }
+
+            await AddPointAsync(str, agi, vit, ene);
+        }
+
+        protected async Task ResetNormalAsync(int str, int agi, int vit, int ene)
+        {
+            Console.WriteLine(nameof(ResetVipAsync));
+            var client =
+                new RestClient(
+                    "http://id.muthiensu.vn/losttower/ajax_action.php?ajax=char_rs&action=reset");
+            client.Timeout = -1;
+            var request = new RestRequest(Method.GET);
+            request.AddHeader("X-Requested-With", "XMLHttpRequest");
+            request.AddHeader("Cookie", $"PHPSESSID={SessionId}");
+
+            var restResponse = client.Execute(request);
+            if (restResponse.StatusCode != HttpStatusCode.OK)
+                throw new Exception($"Reset that bai, status {restResponse.StatusCode}");
+
+            Console.WriteLine(restResponse.Content);
+
+            try
+            {
+                var lvl = await GetCharacterLevelAsync();
+                if (lvl >= 160)
+                    throw new Exception($"Qua trinh reset co the da xay ra loi (phat hien thong qua kiem tra lvl hien tai = {lvl})");
+            }
+            catch (Exception e)
+            {
+                Console.Error.WriteLine("Kiem tra sau reset that bai");
+                Console.Error.WriteLine(e);
+                Console.Error.WriteLine("Kiem tra sau reset that bai");
+                return;
+            }
+
+            await AddPointAsync(str, agi, vit, ene);
         }
 
         protected void TryUpdatePointValue(ref int str, ref int agi, ref int vit, ref int ene)
