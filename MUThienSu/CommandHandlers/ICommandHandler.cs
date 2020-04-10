@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Threading.Tasks;
 using RestSharp;
 
@@ -327,6 +328,32 @@ namespace MUThienSu.CommandHandlers
                 throw new ArgumentException($"Invalid level value '{lvl}'");
 
             return lvl;
+        }
+    }
+
+    [AttributeUsage(AttributeTargets.Class)]
+    public class Command : Attribute
+    {
+        public string Name { get; }
+
+        public Command(string name)
+        {
+            Name = name?.ToLower();
+        }
+    }
+
+    public static class CommandHandlerExtension
+    {
+        public static string RegisteredCommandName(this Type type)
+        {
+            var ca = type.GetCustomAttribute(typeof(Command));
+            if (ca is Command cm) return cm.Name;
+            return null;
+        }
+
+        public static string RegisteredCommandName<T>(this T type) where T : ICommandHandler
+        {
+            return typeof(T).RegisteredCommandName();
         }
     }
 }

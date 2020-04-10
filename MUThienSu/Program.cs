@@ -11,26 +11,30 @@ namespace MUThienSu
     {
         private static readonly IDictionary<string, Type> RegisteredCommandHandlers = new Dictionary<string, Type>();
 
+        public const int OffSetIndex = 3;
+
         internal static async Task Main(string[] args)
         {
-            Register<ResetVipCommandHandler>("reset-vip");
-            Register<ResetNormalCommandHandler>("reset");
-            Register<AddPointCommandHandler>("add-point");
-            
+            Register<ResetVipCommandHandler>();
+            Register<ResetNormalCommandHandler>();
+            Register<AddPointCommandHandler>();
+
             if (args.Length < 3)
-                throw new InvalidOperationException(
-                    "Require at least 3 parameters: <account> <character name> <command-name> [others args]");
+                Exit("Yêu cầu tối thiểu 3 param: <account> <character name> <command-name> [others args]");
+
+            if (!File.Exists(AccPassFile))
+                Exit($"Không tìm thấy file '{AccPassFile}'");
 
             var allAccPass = LoadAccountPasswords();
             var account = args[0];
             var character = args[1];
             var command = args[2];
-            
+
             if (!allAccPass.TryGetValue(account, out var password))
-                throw new InvalidOperationException($"Khong tim thay pass cua acc {account} trong file '{AccPassFile}'. Format: account <tab> password");
+                Exit($"Không tìm thấy account '{account}' trong file '{AccPassFile}'. Format: account <tab> password");
 
             if (!RegisteredCommandHandlers.TryGetValue(command.ToLower(), out var typeOfCommandHandler))
-                throw new ArgumentException($"No handler for command '{command}'");
+                Exit($"Command '{command}' không tồn tại");
 
             var instance = Activator.CreateInstance(typeOfCommandHandler, new object[]
             {
@@ -43,9 +47,15 @@ namespace MUThienSu
             await instance.ExecuteAsync(args.Skip(3).ToArray());
         }
 
-        private static void Register<T>(string name) where T : ICommandHandler
+        private static void Exit(string msg, int exitCode = 0)
         {
-            RegisteredCommandHandlers.Add(name.ToLower(), typeof(T));
+            Console.WriteLine(msg);
+            Environment.Exit(exitCode);
+        }
+
+        private static void Register<T>() where T : ICommandHandler
+        {
+            RegisteredCommandHandlers.Add(typeof(T).RegisteredCommandName(), typeof(T));
         }
 
         private const string AccPassFile = "accounts.muts.txt";
@@ -56,14 +66,10 @@ namespace MUThienSu
             {
                 return File.ReadAllLines(AccPassFile)
                     .Where(x => !x.IsBlank())
-                    .Select(x => x.Split(new []{'\t', ' '}, StringSplitOptions.RemoveEmptyEntries))
+                    .Select(x => x.Split(new[] { '\t', ' ' }, StringSplitOptions.RemoveEmptyEntries))
                     .Where(x => x.Length == 2)
                     .Select(x => x.Select(y => y.Trim()).ToArray())
                     .ToDictionary(x => x[0], x => x[1]);
-            }
-            catch (FileNotFoundException e)
-            {
-                return new Dictionary<string, string>();
             }
             catch (Exception e)
             {
