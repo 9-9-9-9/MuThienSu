@@ -168,12 +168,14 @@ namespace MUThienSu.CommandHandlers
                 return;
             }
 
+            TryUpdatePointValue(ref str, ref agi, ref vit, ref ene);
+
             await AddPointAsync(str, agi, vit, ene);
         }
 
         protected async Task ResetNormalAsync(int str, int agi, int vit, int ene)
         {
-            Console.WriteLine(nameof(ResetVipAsync));
+            Console.WriteLine(nameof(ResetNormalAsync));
             var client =
                 new RestClient(
                     "http://id.muthiensu.vn/losttower/ajax_action.php?ajax=char_rs&action=reset");
@@ -204,6 +206,7 @@ namespace MUThienSu.CommandHandlers
                 return;
             }
 
+            TryUpdatePointValue(ref str, ref agi, ref vit, ref ene);
 
             await AddPointAsync(str, agi, vit, ene);
         }

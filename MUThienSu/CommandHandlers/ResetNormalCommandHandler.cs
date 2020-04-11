@@ -38,8 +38,6 @@ namespace MUThienSu.CommandHandlers
                 var vit = int.Parse(args[2]);
                 var ene = int.Parse(args[3]);
 
-                TryUpdatePointValue(ref str, ref agi, ref vit, ref ene);
-
                 await ResetNormalAsync(str, agi, vit, ene);
             }
         }
