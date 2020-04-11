@@ -223,7 +223,7 @@ namespace MUThienSu.CommandHandlers
 
                 if (totalPoint < allStats.Where(x => x > 0).Sum())
                     throw new ArgumentException(
-                        $"Tong point yeu cau vuot qua so du hien tai la {totalPoint} (yeu cau {allStats.Where(x => x > 0).Sum()})");
+                        $"Tổng số point yêu cầu vượt quá số dư hiện tại là {totalPoint} (yêu cầu {allStats.Where(x => x > 0).Sum()})");
 
 
                 var remainingPoint = totalPoint - allStats.Where(x => x >= 0).Sum();
@@ -263,21 +263,21 @@ namespace MUThienSu.CommandHandlers
             request.AddHeader("Cookie", $"PHPSESSID={SessionId}");
             var restResponse = await client.ExecuteAsync(request);
             if (restResponse.StatusCode != HttpStatusCode.OK)
-                throw new Exception($"Lay thong tin total point that bai, status {restResponse.StatusCode}");
+                throw new Exception($"Lấy thông tin total point thất bại, status {restResponse.StatusCode}");
 
             var content = restResponse.Content;
             var idxTongDiemCoTheCong = content.IndexOf("Tổng Điểm có thể cộng", StringComparison.InvariantCulture);
             if (idxTongDiemCoTheCong < 0)
-                throw new Exception("Khong the xac dinh duoc pattern 1");
+                throw new Exception("Không thể xác định được pattern 1");
             var idxPointTotal = content.IndexOf("point_total", idxTongDiemCoTheCong, StringComparison.InvariantCulture);
             if (idxPointTotal < 0)
-                throw new Exception("Khong the xac dinh duoc pattern 2");
+                throw new Exception("Không thể xác định được pattern 2");
             var idxCloseGt = content.IndexOf('>', idxPointTotal);
             if (idxCloseGt < 0)
-                throw new Exception("Khong the xac dinh duoc pattern 3");
+                throw new Exception("Không thể xác định được pattern 3");
             var idxOpenLt = content.IndexOf('<', idxCloseGt);
             if (idxOpenLt < 0)
-                throw new Exception("Khong the xac dinh duoc pattern 4");
+                throw new Exception("Không thể xác định được pattern 4");
 
             var strTotalPoint = content
                 .Substring(idxCloseGt + 1, idxOpenLt - idxCloseGt - 1)
@@ -305,31 +305,31 @@ namespace MUThienSu.CommandHandlers
             request.AddHeader("Cookie", $"PHPSESSID={SessionId}");
             var restResponse = await client.ExecuteAsync(request);
             if (restResponse.StatusCode != HttpStatusCode.OK)
-                throw new Exception($"Lay thong tin level nhan vat that bai, status {restResponse.StatusCode}");
+                throw new Exception($"Lấy thông tin level nhân vật thất bại, status {restResponse.StatusCode}");
 
             var content = restResponse.Content;
             if (!content.Contains("|OK|"))
-                throw new Exception($"Lay thong tin level nhan vat that bai ({restResponse.Content})");
+                throw new Exception($"Lấy thông tin level nhân vật thất bại ({restResponse.Content})");
             
             Console.WriteLine(content);
 
             var idxCharInfo = content.IndexOf("char-info'", StringComparison.InvariantCulture);
             if (idxCharInfo < 0)
-                throw new Exception("Khong the xac dinh duoc pattern 5");
+                throw new Exception("Không thể xác định được pattern 5");
 
             var idxDoubleDot = content.IndexOf(':', idxCharInfo);
             if (idxDoubleDot < 0)
-                throw new Exception("Khong the xac dinh duoc pattern 6");
+                throw new Exception("Không thể xác định được pattern 6");
 
             var idxReset = content.IndexOf("Reset", idxDoubleDot, StringComparison.InvariantCulture);
             if (idxReset < 0)
-                throw new Exception("Khong the xac dinh duoc pattern 7");
+                throw new Exception("Không thể xác định được pattern 7");
 
             var idxBegin = idxDoubleDot + 2;
             var len = idxReset - idxBegin;
             
             if (len < 1)
-                throw new Exception("Khong the xac dinh duoc pattern 8");
+                throw new Exception("Không thể xác định được pattern 8");
             var strLevel = content.Substring(idxBegin, len);
             Console.WriteLine($"Raw: {strLevel}");
 
