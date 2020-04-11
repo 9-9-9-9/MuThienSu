@@ -106,7 +106,7 @@ namespace MUThienSu.CommandHandlers
 
             var restResponse = client.Execute(request);
             if (restResponse.StatusCode != HttpStatusCode.OK)
-                throw new Exception($"Cong point that bai, status {restResponse.StatusCode}");
+                throw new Exception($"Cộng point thất bại, status {restResponse.StatusCode}");
 
             var content = restResponse.Content;
 
@@ -148,21 +148,23 @@ namespace MUThienSu.CommandHandlers
 
             var restResponse = client.Execute(request);
             if (restResponse.StatusCode != HttpStatusCode.OK)
-                throw new Exception($"Reset VIP that bai, status {restResponse.StatusCode}");
+                throw new Exception($"Reset VIP thất bại, status {restResponse.StatusCode}");
 
-            Console.WriteLine(restResponse.Content);
+            if (restResponse.Content?.StartsWith("<nbb>OK<nbb>") != true)
+            {
+                Console.WriteLine(restResponse.Content);
+                Console.WriteLine("Reset VIP thất bại");
 
-            try
-            {
-                var lvl = await GetCharacterLevelAsync();
-                if (lvl >= 160)
-                    throw new Exception($"Qua trinh reset co the da xay ra loi (phat hien thong qua kiem tra lvl hien tai = {lvl})");
-            }
-            catch (Exception e)
-            {
-                Console.Error.WriteLine("Kiem tra sau reset that bai");
-                Console.Error.WriteLine(e);
-                Console.Error.WriteLine("Kiem tra sau reset that bai");
+                try
+                {
+                    var lvl = await GetCharacterLevelAsync();
+                    Console.WriteLine($"Cấp độ hiện tại là {lvl}");
+                }
+                catch (Exception e)
+                {
+                    //
+                }
+
                 return;
             }
 
@@ -182,23 +184,26 @@ namespace MUThienSu.CommandHandlers
 
             var restResponse = client.Execute(request);
             if (restResponse.StatusCode != HttpStatusCode.OK)
-                throw new Exception($"Reset that bai, status {restResponse.StatusCode}");
+                throw new Exception($"Reset thất bại, status {restResponse.StatusCode}");
 
-            Console.WriteLine(restResponse.Content);
+            if (restResponse.Content?.StartsWith("<nbb>OK<nbb>") != true)
+            {
+                Console.WriteLine(restResponse.Content);
+                Console.WriteLine("Reset thất bại");
 
-            try
-            {
-                var lvl = await GetCharacterLevelAsync();
-                if (lvl >= 160)
-                    throw new Exception($"Qua trinh reset co the da xay ra loi (phat hien thong qua kiem tra lvl hien tai = {lvl})");
-            }
-            catch (Exception e)
-            {
-                Console.Error.WriteLine("Kiem tra sau reset that bai");
-                Console.Error.WriteLine(e);
-                Console.Error.WriteLine("Kiem tra sau reset that bai");
+                try
+                {
+                    var lvl = await GetCharacterLevelAsync();
+                    Console.WriteLine($"Cấp độ hiện tại là {lvl}");
+                }
+                catch (Exception e)
+                {
+                    //
+                }
+
                 return;
             }
+
 
             await AddPointAsync(str, agi, vit, ene);
         }
