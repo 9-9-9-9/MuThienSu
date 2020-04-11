@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
 namespace Login
@@ -59,7 +58,18 @@ namespace Login
             }
         }
 
-        public static List<Account> Accounts => accounts.Select(x => x.Value).ToList();
+        public static List<Account> Accounts
+        {
+            get
+            {
+                var result = new List<Account>();
+                foreach (var item in accounts.Values)
+                {
+                    result.Add(item);
+                }
+                return result;
+            }
+        }
 
         public static void Save(string accountName, string password)
         {

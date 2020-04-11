@@ -8,7 +8,7 @@ namespace Login
         public SettingForm()
         {
             InitializeComponent();
-            this.txtAccountFileName.Text = AccountManager.FILE_NAME;
+            this.txtAccountFileName.Text = AccountManager.FileName;
         }
 
         private void btnUpdate_Click(object sender, EventArgs e)
