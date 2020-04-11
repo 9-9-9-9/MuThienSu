@@ -1,20 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
 namespace Login
 {
     class AccountManager
     {
-        private static Dictionary<string, Account> accounts = new Dictionary<string, Account>();
+        private static readonly Dictionary<string, Account> accounts = new Dictionary<string, Account>();
 
-        public static readonly string FILE_NAME;
+        public static readonly string FileName;
 
-        static AccountManager() {
-            string exe = System.AppDomain.CurrentDomain.FriendlyName;
+        static AccountManager()
+        {
+            var exe = AppDomain.CurrentDomain.FriendlyName;
             exe = exe.Substring(0, exe.Length - 4);
-            FILE_NAME = exe + ".txt";
+            FileName = exe + ".txt";
         }
 
         public static void Load()
@@ -25,14 +27,15 @@ namespace Login
             string[] lines = null;
             try
             {
-                lines = File.ReadAllLines(FILE_NAME);
+                lines = File.ReadAllLines(FileName);
             }
             catch
             {
+                //
             }
             if (lines != null)
             {
-                foreach (string line in lines)
+                foreach (var line in lines)
                 {
                     if (string.IsNullOrEmpty(line))
                         continue;
@@ -50,26 +53,17 @@ namespace Login
             }
             if (account != null)
             {
-                throw new Exception("File " + FILE_NAME + " bị sai định dạng rồi");
+                // ReSharper disable StringLiteralTypo
+                throw new Exception("File " + FileName + " bị sai định dạng rồi");
+                // ReSharper restore StringLiteralTypo
             }
         }
 
-        public static List<Account> Accounts
-        {
-            get
-            {
-                List<Account> result = new List<Account>();
-                foreach (var item in accounts.Values)
-                {
-                    result.Add(item);
-                };
-                return result;
-            }
-        }
+        public static List<Account> Accounts => accounts.Select(x => x.Value).ToList();
 
-        public static void Save(string AccountName, string Password)
+        public static void Save(string accountName, string password)
         {
-            Account account = new Account { AccountName = AccountName.Trim(), Password = Password };
+            var account = new Account { AccountName = accountName.Trim(), Password = password };
             if (accounts.ContainsKey(account.AccountName))
             {
                 accounts[account.AccountName] = account;
@@ -79,14 +73,14 @@ namespace Login
                 accounts.Add(account.AccountName, account);
             }
 
-            List<string> lines = new List<string>();
+            var lines = new List<string>();
             foreach (var acc in Accounts)
             {
                 lines.Add(acc.AccountName);
                 lines.Add(acc.EncryptedPassword);
                 lines.Add("");
             }
-            File.WriteAllLines(FILE_NAME, lines.ToArray(), Encoding.UTF8);
+            File.WriteAllLines(FileName, lines.ToArray(), Encoding.UTF8);
         }
     }
 }

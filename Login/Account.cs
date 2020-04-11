@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using System.Text;
 
 namespace Login
@@ -15,16 +13,16 @@ namespace Login
         {
             get
             {
-                byte[] b = Encoding.UTF8.GetBytes(this.Password);
-                BitArray bits = new BitArray(b);
+                var b = Encoding.UTF8.GetBytes(this.Password);
+                var bits = new BitArray(b);
                 Reverse(bits);
                 bits.CopyTo(b, 0);
                 return System.Convert.ToBase64String(b);
             }
             set
             {
-                byte[] b = System.Convert.FromBase64String(value);
-                BitArray bits = new BitArray(b);
+                var b = System.Convert.FromBase64String(value);
+                var bits = new BitArray(b);
                 Reverse(bits);
                 bits.CopyTo(b, 0);
                 this.Password = Encoding.UTF8.GetString(b);
@@ -33,12 +31,12 @@ namespace Login
 
         private void Reverse(BitArray array)
         {
-            int length = array.Length;
-            int mid = (length / 2);
+            var length = array.Length;
+            var mid = (length / 2);
 
-            for (int i = 0; i < mid; i++)
+            for (var i = 0; i < mid; i++)
             {
-                bool bit = array[i];
+                var bit = array[i];
                 array[i] = array[length - i - 1];
                 array[length - i - 1] = bit;
             }

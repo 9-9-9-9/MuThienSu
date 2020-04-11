@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 
 namespace Login
@@ -18,11 +13,15 @@ namespace Login
 
         private void btnUpdate_Click(object sender, EventArgs e)
         {
-            string acc = this.txtAccount.Text.Trim();
-            string pwd = this.txtPassword.Text.Trim();
+            var acc = this.txtAccount.Text.Trim();
+            var pwd = this.txtPassword.Text.Trim();
             if (acc.Length == 0 || pwd.Length == 0)
             {
+                // ReSharper disable StringLiteralTypo
+                // ReSharper disable LocalizableElement
                 MessageBox.Show("Tài khoản và mật khẩu không được để trống", "Kiểm tra lại", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                // ReSharper restore LocalizableElement
+                // ReSharper restore StringLiteralTypo
                 return;
             }
             AccountManager.Save(acc, pwd);

@@ -1,5 +1,7 @@
 ﻿using Microsoft.Win32;
 using System;
+using System.Diagnostics;
+using System.IO;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -7,8 +9,11 @@ namespace Login
 {
     public partial class MainForm : Form
     {
-        const string HKEY_CURRENT_USER_SOFTWARE = @"Software\Webzen\MU\Config";
-        const string HKEY_CURRENT_USER_SUB_KEY = "ID";
+        // ReSharper disable InconsistentNaming
+        private const string HKEY_CURRENT_USER_SOFTWARE = @"Software\Webzen\MU\Config";
+        private const string HKEY_CURRENT_USER_SUB_KEY = "ID";
+        // ReSharper restore InconsistentNaming
+
         public MainForm()
         {
             InitializeComponent();
@@ -20,7 +25,7 @@ namespace Login
         private void btnSetting_Click(object sender, EventArgs e)
         {
             new SettingForm().ShowDialog();
-            reloadConfig();
+            ReloadConfig();
         }
 
         private void btnLogin_Click(object sender, EventArgs e)
@@ -30,11 +35,10 @@ namespace Login
 
             Account selected = GetSelectedAccount();
 
-            using (RegistryKey explorerKey =
+            using (var explorerKey =
                 Registry.CurrentUser.OpenSubKey(HKEY_CURRENT_USER_SOFTWARE, writable: true))
             {
-                if (explorerKey != null)
-                    explorerKey.SetValue(HKEY_CURRENT_USER_SUB_KEY, selected.AccountName);
+                explorerKey?.SetValue(HKEY_CURRENT_USER_SUB_KEY, selected.AccountName);
             }
 
             ClipboardSetText(selected.Password);
@@ -43,13 +47,12 @@ namespace Login
 
         private void MainForm_Shown(object sender, EventArgs e)
         {
-#if !DEBUG
-                if (!File.Exists("main.exe") || !File.Exists("LauncherOption.if"))
-                {
-                    MessageBox.Show("Bác cho file này vào thư mục MU Legend thì mới được nhé");
-                    Environment.Exit(1);
-                }
-#endif
+            if (!File.Exists("main.exe"))
+            {
+                // ReSharper disable once LocalizableElement
+                MessageBox.Show("Bác cho file này vào thư mục MU Legend thì mới được nhé");
+                Environment.Exit(1);
+            }
 
             ToolTip toolTip1 = new ToolTip
             {
@@ -62,10 +65,10 @@ namespace Login
             toolTip1.SetToolTip(this.cbbAccounts, "Danh sách tài khoản");
             toolTip1.SetToolTip(this.btnCopyPassword, "Copy mật khẩu (Ctrl V để paste)");
             toolTip1.SetToolTip(this.btnLogin, "Khởi động");
-            reloadConfig();
+            ReloadConfig();
         }
 
-        private void reloadConfig()
+        private void ReloadConfig()
         {
             AccountManager.Load();
             this.cbbAccounts.DataSource = AccountManager.Accounts;
@@ -74,10 +77,10 @@ namespace Login
 
         private void StartClient()
         {
-            string dir = System.IO.Directory.GetCurrentDirectory();
-            string exe = System.IO.Path.Combine(dir, "main.exe");
-            System.Diagnostics.Process prc = new System.Diagnostics.Process();
-            System.Diagnostics.ProcessStartInfo prs = new System.Diagnostics.ProcessStartInfo
+            var dir = Directory.GetCurrentDirectory();
+            var exe = Path.Combine(dir, "main.exe");
+            var prc = new Process();
+            var prs = new ProcessStartInfo
             {
                 WorkingDirectory = dir,
                 UseShellExecute = false,
@@ -105,7 +108,7 @@ namespace Login
         {
             if (this.cbbAccounts.SelectedIndex < 0)
                 return;
-            Account selected = GetSelectedAccount();
+            var selected = GetSelectedAccount();
             ClipboardSetText(selected.Password);
         }
 
