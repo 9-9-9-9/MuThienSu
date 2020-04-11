@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Net;
+using System.Threading.Tasks;
+using RestSharp;
+using RestSharp.Authenticators;
 
 namespace MUThienSu
 {
@@ -38,6 +41,13 @@ namespace MUThienSu
                     anyMinus1 = true;
                 }
             }
+        }
+
+        public static Task<IRestResponse> ExecuteAsync(this RestClient client, RestRequest request)
+        {
+            var taskCompletionSource = new TaskCompletionSource<IRestResponse>();
+            client.ExecuteAsync(request, response => taskCompletionSource.SetResult(response));
+            return taskCompletionSource.Task;
         }
     }
 }

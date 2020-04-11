@@ -54,7 +54,7 @@ namespace MUThienSu.CommandHandlers
             request.AddParameter("username", Account);
             request.AddParameter("password", Password);
             request.AddParameter("submit", "");
-            var restResponse = client.Execute(request);
+            var restResponse = await client.ExecuteAsync(request);
             if (restResponse.StatusCode != HttpStatusCode.OK)
                 throw new Exception($"Dang nhap that bai, status {restResponse.StatusCode}");
 
@@ -75,7 +75,7 @@ namespace MUThienSu.CommandHandlers
             request.AddHeader("X-Requested-With", "XMLHttpRequest");
             request.AddHeader("Referer", "http://id.muthiensu.vn/losttower/");
             request.AddHeader("Cookie", $"PHPSESSID={SessionId}");
-            var restResponse = client.Execute(request);
+            var restResponse = await client.ExecuteAsync(request);
             if (restResponse.StatusCode != HttpStatusCode.OK)
                 throw new Exception($"Chon nhan vat that bai, status {restResponse.StatusCode}");
 
@@ -104,7 +104,7 @@ namespace MUThienSu.CommandHandlers
             request.AddParameter("ene", ene.ToString());
             request.AddParameter("Submit", "");
 
-            var restResponse = client.Execute(request);
+            var restResponse = await client.ExecuteAsync(request);
             if (restResponse.StatusCode != HttpStatusCode.OK)
                 throw new Exception($"Cộng point thất bại, status {restResponse.StatusCode}");
 
@@ -146,7 +146,7 @@ namespace MUThienSu.CommandHandlers
             request.AddHeader("X-Requested-With", "XMLHttpRequest");
             request.AddHeader("Cookie", $"PHPSESSID={SessionId}");
 
-            var restResponse = client.Execute(request);
+            var restResponse = await client.ExecuteAsync(request);
             if (restResponse.StatusCode != HttpStatusCode.OK)
                 throw new Exception($"Reset VIP thất bại, status {restResponse.StatusCode}");
 
@@ -160,7 +160,7 @@ namespace MUThienSu.CommandHandlers
                     var lvl = await GetCharacterLevelAsync();
                     Console.WriteLine($"Cấp độ hiện tại là {lvl}");
                 }
-                catch (Exception e)
+                catch
                 {
                     //
                 }
@@ -184,7 +184,7 @@ namespace MUThienSu.CommandHandlers
             request.AddHeader("X-Requested-With", "XMLHttpRequest");
             request.AddHeader("Cookie", $"PHPSESSID={SessionId}");
 
-            var restResponse = client.Execute(request);
+            var restResponse = await client.ExecuteAsync(request);
             if (restResponse.StatusCode != HttpStatusCode.OK)
                 throw new Exception($"Reset thất bại, status {restResponse.StatusCode}");
 
@@ -198,9 +198,8 @@ namespace MUThienSu.CommandHandlers
                     var lvl = await GetCharacterLevelAsync();
                     Console.WriteLine($"Cấp độ hiện tại là {lvl}");
                 }
-                catch (Exception e)
+                catch
                 {
-                    //
                 }
 
                 return;
@@ -218,7 +217,7 @@ namespace MUThienSu.CommandHandlers
                 if (str >= 0 && agi >= 0 && vit >= 0 && ene >= 0)
                     return;
 
-                var totalPoint = GetTotalRemainingPoint();
+                var totalPoint = GetTotalRemainingPointAsync().Result;
 
                 var allStats = new[] {str, agi, vit, ene};
 
@@ -254,7 +253,7 @@ namespace MUThienSu.CommandHandlers
             }
         }
 
-        private int GetTotalRemainingPoint()
+        private async Task<int> GetTotalRemainingPointAsync()
         {
             var client = new RestClient("http://id.muthiensu.vn/losttower/index2.php?mod=char_manager&act=addpoint");
             client.Timeout = -1;
@@ -262,7 +261,7 @@ namespace MUThienSu.CommandHandlers
             request.AddHeader("X-Requested-With", "XMLHttpRequest");
             request.AddHeader("Referer", "http://id.muthiensu.vn/losttower/");
             request.AddHeader("Cookie", $"PHPSESSID={SessionId}");
-            var restResponse = client.Execute(request);
+            var restResponse = await client.ExecuteAsync(request);
             if (restResponse.StatusCode != HttpStatusCode.OK)
                 throw new Exception($"Lay thong tin total point that bai, status {restResponse.StatusCode}");
 
@@ -304,7 +303,7 @@ namespace MUThienSu.CommandHandlers
             request.AddHeader("X-Requested-With", "XMLHttpRequest");
             request.AddHeader("Referer", "http://id.muthiensu.vn/losttower/");
             request.AddHeader("Cookie", $"PHPSESSID={SessionId}");
-            var restResponse = client.Execute(request);
+            var restResponse = await client.ExecuteAsync(request);
             if (restResponse.StatusCode != HttpStatusCode.OK)
                 throw new Exception($"Lay thong tin level nhan vat that bai, status {restResponse.StatusCode}");
 
