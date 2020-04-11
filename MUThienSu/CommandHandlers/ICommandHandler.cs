@@ -272,7 +272,9 @@ namespace MUThienSu.CommandHandlers
             if (idxOpenLt < 0)
                 throw new Exception("Khong the xac dinh duoc pattern 4");
 
-            var strTotalPoint = content.Substring(idxCloseGt + 1, idxOpenLt - idxCloseGt - 1);
+            var strTotalPoint = content
+                .Substring(idxCloseGt + 1, idxOpenLt - idxCloseGt - 1)
+                .Replace(".", "");
             Console.WriteLine($"Raw: {strTotalPoint}");
 
             if (!int.TryParse(strTotalPoint, out var totalPoint))
