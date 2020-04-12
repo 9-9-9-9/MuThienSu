@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Net;
 using System.Threading.Tasks;
 using RestSharp;
-using RestSharp.Authenticators;
+// ReSharper disable StringLiteralTypo
 
 namespace MUThienSu
 {

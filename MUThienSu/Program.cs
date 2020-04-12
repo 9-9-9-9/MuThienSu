@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using MUThienSu.CommandHandlers;
+// ReSharper disable StringLiteralTypo
 
 namespace MUThienSu
 {
@@ -36,12 +37,8 @@ namespace MUThienSu
             if (!RegisteredCommandHandlers.TryGetValue(command.ToLower(), out var typeOfCommandHandler))
                 Exit($"Command '{command}' không tồn tại");
 
-            var instance = Activator.CreateInstance(typeOfCommandHandler, new object[]
-            {
-                account,
-                password,
-                character
-            }) as ICommandHandler;
+            // ReSharper disable once AssignNullToNotNullAttribute
+            var instance = Activator.CreateInstance(typeOfCommandHandler, account, password, character) as ICommandHandler;
 
             try
             {

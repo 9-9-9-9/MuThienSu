@@ -5,6 +5,8 @@ using System.Reflection;
 using System.Threading.Tasks;
 using RestSharp;
 
+// ReSharper disable StringLiteralTypo
+
 namespace MUThienSu.CommandHandlers
 {
     public interface ICommandHandler
@@ -39,8 +41,7 @@ namespace MUThienSu.CommandHandlers
         protected async Task LoginAsync()
         {
             Console.WriteLine(nameof(LoginAsync));
-            var client = new RestClient("http://id.muthiensu.vn/losttower/");
-            client.Timeout = -1;
+            var client = new RestClient("http://id.muthiensu.vn/losttower/") {Timeout = -1};
             var request = new RestRequest(Method.POST);
             request.AddHeader("Origin", "http://id.muthiensu.vn");
             request.AddHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -69,8 +70,10 @@ namespace MUThienSu.CommandHandlers
             Console.WriteLine(nameof(SelectCharacterAsync));
             var client =
                 new RestClient(
-                    $"http://id.muthiensu.vn/losttower/ajax_action.php?ajax=char_choise&char_choise={Character}");
-            client.Timeout = -1;
+                    $"http://id.muthiensu.vn/losttower/ajax_action.php?ajax=char_choise&char_choise={Character}")
+                {
+                    Timeout = -1
+                };
             var request = new RestRequest(Method.GET);
             request.AddHeader("X-Requested-With", "XMLHttpRequest");
             request.AddHeader("Referer", "http://id.muthiensu.vn/losttower/");
@@ -88,8 +91,11 @@ namespace MUThienSu.CommandHandlers
         protected async Task AddPointAsync(int str, int agi, int vit, int ene, int cmd)
         {
             Console.WriteLine($"{nameof(AddPointAsync)} s+{str} a+{agi} v+{vit} e+{ene} c+{cmd}");
-            var client = new RestClient("http://id.muthiensu.vn/losttower/index.php?mod=char_manager&act=addpoint");
-            client.Timeout = -1;
+            var client =
+                new RestClient("http://id.muthiensu.vn/losttower/index.php?mod=char_manager&act=addpoint")
+                {
+                    Timeout = -1
+                };
             var request = new RestRequest(Method.POST);
             request.AddHeader("Origin", "http://id.muthiensu.vn");
             request.AddHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -142,8 +148,10 @@ namespace MUThienSu.CommandHandlers
             Console.WriteLine(nameof(ResetVipAsync));
             var client =
                 new RestClient(
-                    "http://id.muthiensu.vn/losttower/ajax_action.php?ajax=char_rs&action=reset_vip&tiente=gcoin");
-            client.Timeout = -1;
+                    "http://id.muthiensu.vn/losttower/ajax_action.php?ajax=char_rs&action=reset_vip&tiente=gcoin")
+                {
+                    Timeout = -1
+                };
             var request = new RestRequest(Method.GET);
             request.AddHeader("X-Requested-With", "XMLHttpRequest");
             request.AddHeader("Cookie", $"PHPSESSID={SessionId}");
@@ -179,8 +187,7 @@ namespace MUThienSu.CommandHandlers
             var client =
                 new RestClient(
                     "http://id.muthiensu.vn/losttower/ajax_action.php?ajax=char_rs&action=reset"
-                );
-            client.Timeout = -1;
+                ) {Timeout = -1};
             var request = new RestRequest(Method.GET);
             request.AddHeader("X-Requested-With", "XMLHttpRequest");
             request.AddHeader("Cookie", $"PHPSESSID={SessionId}");
@@ -260,8 +267,11 @@ namespace MUThienSu.CommandHandlers
 
         private async Task<int> GetTotalRemainingPointAsync()
         {
-            var client = new RestClient("http://id.muthiensu.vn/losttower/index2.php?mod=char_manager&act=addpoint");
-            client.Timeout = -1;
+            var client =
+                new RestClient("http://id.muthiensu.vn/losttower/index2.php?mod=char_manager&act=addpoint")
+                {
+                    Timeout = -1
+                };
             var request = new RestRequest(Method.GET);
             request.AddHeader("X-Requested-With", "XMLHttpRequest");
             request.AddHeader("Referer", "http://id.muthiensu.vn/losttower/");
@@ -302,8 +312,10 @@ namespace MUThienSu.CommandHandlers
             Console.WriteLine(nameof(GetCharacterLevelAsync));
             var client =
                 new RestClient(
-                    $"http://id.muthiensu.vn/losttower/ajax_action.php?ajax=char_choise&char_choise={Character}");
-            client.Timeout = -1;
+                    $"http://id.muthiensu.vn/losttower/ajax_action.php?ajax=char_choise&char_choise={Character}")
+                {
+                    Timeout = -1
+                };
             var request = new RestRequest(Method.GET);
             request.AddHeader("X-Requested-With", "XMLHttpRequest");
             request.AddHeader("Referer", "http://id.muthiensu.vn/losttower/");

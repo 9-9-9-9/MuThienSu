@@ -1,10 +1,10 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using MUThienSu.Exceptions;
 
 namespace MUThienSu.CommandHandlers
 {
     [Command("add-point")]
+    // ReSharper disable once ClassNeverInstantiated.Global
     public class AddPointCommandHandler : AbstractCommandHandler
     {
         public AddPointCommandHandler(string account, string password, string character) : base(account, password,

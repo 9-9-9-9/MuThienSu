@@ -1,10 +1,10 @@
-using System;
 using System.Threading.Tasks;
 using MUThienSu.Exceptions;
 
 namespace MUThienSu.CommandHandlers
 {
     [Command("reset")]
+    // ReSharper disable once ClassNeverInstantiated.Global
     public class ResetNormalCommandHandler : AbstractCommandHandler
     {
         public ResetNormalCommandHandler(string account, string password, string character) : base(account, password, character)
