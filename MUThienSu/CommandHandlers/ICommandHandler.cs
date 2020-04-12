@@ -85,9 +85,9 @@ namespace MUThienSu.CommandHandlers
             await Task.CompletedTask;
         }
 
-        protected async Task AddPointAsync(int str, int agi, int vit, int ene)
+        protected async Task AddPointAsync(int str, int agi, int vit, int ene, int cmd)
         {
-            Console.WriteLine($"{nameof(AddPointAsync)} +{str} +{agi} +{vit} +{ene}");
+            Console.WriteLine($"{nameof(AddPointAsync)} s+{str} a+{agi} v+{vit} e+{ene} c+{cmd}");
             var client = new RestClient("http://id.muthiensu.vn/losttower/index.php?mod=char_manager&act=addpoint");
             client.Timeout = -1;
             var request = new RestRequest(Method.POST);
@@ -102,6 +102,8 @@ namespace MUThienSu.CommandHandlers
             request.AddParameter("dex", agi.ToString());
             request.AddParameter("vit", vit.ToString());
             request.AddParameter("ene", ene.ToString());
+            if (cmd > 0)
+                request.AddParameter("ml", cmd.ToString());
             request.AddParameter("Submit", "");
 
             var restResponse = await client.ExecuteAsync(request);
@@ -135,7 +137,7 @@ namespace MUThienSu.CommandHandlers
             await Task.CompletedTask;
         }
 
-        protected async Task ResetVipAsync(int str, int agi, int vit, int ene)
+        protected async Task<bool> ResetVipAsync()
         {
             Console.WriteLine(nameof(ResetVipAsync));
             var client =
@@ -165,20 +167,19 @@ namespace MUThienSu.CommandHandlers
                     //
                 }
 
-                return;
+                return false;
             }
 
-            TryUpdatePointValue(ref str, ref agi, ref vit, ref ene);
-
-            await AddPointAsync(str, agi, vit, ene);
+            return true;
         }
 
-        protected async Task ResetNormalAsync(int str, int agi, int vit, int ene)
+        protected async Task<bool> ResetNormalAsync()
         {
             Console.WriteLine(nameof(ResetNormalAsync));
             var client =
                 new RestClient(
-                    "http://id.muthiensu.vn/losttower/ajax_action.php?ajax=char_rs&action=reset");
+                    "http://id.muthiensu.vn/losttower/ajax_action.php?ajax=char_rs&action=reset"
+                );
             client.Timeout = -1;
             var request = new RestRequest(Method.GET);
             request.AddHeader("X-Requested-With", "XMLHttpRequest");
@@ -200,30 +201,30 @@ namespace MUThienSu.CommandHandlers
                 }
                 catch
                 {
+                    //
                 }
 
-                return;
+                return false;
             }
 
-            TryUpdatePointValue(ref str, ref agi, ref vit, ref ene);
-
-            await AddPointAsync(str, agi, vit, ene);
+            return true;
         }
 
-        protected void TryUpdatePointValue(ref int str, ref int agi, ref int vit, ref int ene)
+        protected void TryUpdatePointValue(ref int str, ref int agi, ref int vit, ref int ene, ref int cmd)
         {
             try
             {
-                if (str >= 0 && agi >= 0 && vit >= 0 && ene >= 0)
+                if (str >= 0 && agi >= 0 && vit >= 0 && ene >= 0 && cmd >= 0)
                     return;
 
                 var totalPoint = GetTotalRemainingPointAsync().Result;
 
-                var allStats = new[] {str, agi, vit, ene};
+                var allStats = new[] {str, agi, vit, ene, cmd};
 
                 if (totalPoint < allStats.Where(x => x > 0).Sum())
                     throw new ArgumentException(
-                        $"Tổng số point yêu cầu vượt quá số dư hiện tại là {totalPoint} (yêu cầu {allStats.Where(x => x > 0).Sum()})");
+                        $"Tổng số point yêu cầu vượt quá số dư hiện tại là {totalPoint} (yêu cầu {allStats.Where(x => x > 0).Sum()})"
+                    );
 
 
                 var remainingPoint = totalPoint - allStats.Where(x => x >= 0).Sum();
@@ -237,6 +238,8 @@ namespace MUThienSu.CommandHandlers
                     vit = avg;
                 if (ene < 0)
                     ene = avg;
+                if (cmd < 0)
+                    cmd = avg;
             }
             catch (Exception e)
             {
@@ -250,6 +253,8 @@ namespace MUThienSu.CommandHandlers
                     vit = 0;
                 if (ene < 0)
                     ene = 0;
+                if (cmd < 0)
+                    cmd = 0;
             }
         }
 
@@ -310,7 +315,7 @@ namespace MUThienSu.CommandHandlers
             var content = restResponse.Content;
             if (!content.Contains("|OK|"))
                 throw new Exception($"Lấy thông tin level nhân vật thất bại ({restResponse.Content})");
-            
+
             Console.WriteLine(content);
 
             var idxCharInfo = content.IndexOf("char-info'", StringComparison.InvariantCulture);
@@ -327,7 +332,7 @@ namespace MUThienSu.CommandHandlers
 
             var idxBegin = idxDoubleDot + 2;
             var len = idxReset - idxBegin;
-            
+
             if (len < 1)
                 throw new Exception("Không thể xác định được pattern 8");
             var strLevel = content.Substring(idxBegin, len);

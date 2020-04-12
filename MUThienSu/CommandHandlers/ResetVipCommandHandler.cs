@@ -16,10 +16,10 @@ namespace MUThienSu.CommandHandlers
             if (args.Length == 0)
                 return;
 
-            if (args.Length != 4)
-                this.ThrowInvalidCommandArgumentsException("[<str> <agi> <vit> <ene>]");
+            if (args.Length != 5)
+                this.ThrowInvalidCommandArgumentsException("[<str> <agi> <vit> <ene> <cmd>]");
 
-            args.Validate4Stats();
+            args.Validate5Stats();
         }
 
         protected override async Task InternalExecutionAsync(string[] args)
@@ -29,7 +29,7 @@ namespace MUThienSu.CommandHandlers
 
             if (args.Length == 0)
             {
-                await ResetVipAsync(0, 0, 0, 0);
+                await ResetVipAsync();
             }
             else
             {
@@ -37,8 +37,16 @@ namespace MUThienSu.CommandHandlers
                 var agi = int.Parse(args[1]);
                 var vit = int.Parse(args[2]);
                 var ene = int.Parse(args[3]);
+                var cmd = int.Parse(args[4]);
 
-                await ResetVipAsync(str, agi, vit, ene);
+                var success = await ResetVipAsync();
+
+                if (!success)
+                    return;
+                
+                TryUpdatePointValue(ref str, ref agi, ref vit, ref ene, ref cmd);
+
+                await AddPointAsync(str, agi, vit, ene, cmd);
             }
         }
     }

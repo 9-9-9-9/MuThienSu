@@ -14,10 +14,10 @@ namespace MUThienSu.CommandHandlers
 
         protected override void ValidateParameters(string[] args)
         {
-            if (args.Length != 4)
-                this.ThrowInvalidCommandArgumentsException("[<str> <agi> <vit> <ene>]");
+            if (args.Length != 5)
+                this.ThrowInvalidCommandArgumentsException("[<str> <agi> <vit> <ene> <cmd>]");
 
-            args.Validate4Stats();
+            args.Validate5Stats();
         }
 
         protected override async Task InternalExecutionAsync(string[] args)
@@ -29,10 +29,11 @@ namespace MUThienSu.CommandHandlers
             var agi = int.Parse(args[1]);
             var vit = int.Parse(args[2]);
             var ene = int.Parse(args[3]);
+            var cmd = int.Parse(args[4]);
 
-            TryUpdatePointValue(ref str, ref agi, ref vit, ref ene);
+            TryUpdatePointValue(ref str, ref agi, ref vit, ref ene, ref cmd);
 
-            await AddPointAsync(str, agi, vit, ene);
+            await AddPointAsync(str, agi, vit, ene, cmd);
         }
     }
 }

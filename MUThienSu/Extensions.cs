@@ -15,7 +15,7 @@ namespace MUThienSu
 
         public static int Index(this int index) => index + Program.OffSetIndex;
 
-        public static void Validate4Stats(this string[] args)
+        public static void Validate5Stats(this string[] args)
         {
             if (args.Length != 4)
                 throw new ArgumentException($"Tham số '{nameof(args)}' yêu cầu 4 phần tử (str, agi, vit, ene)");
