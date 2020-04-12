@@ -1,14 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using MUThienSu.CommandHandlers;
+
+// ReSharper disable StringLiteralTypo
 
 namespace MUThienSu.Exceptions
 {
     public class InvalidCommandArgumentsException : Exception
     {
         public InvalidCommandArgumentsException(ICommandHandler commandHandler, string msg)
-        : base($"Sai câu lệnh: .\\{System.AppDomain.CurrentDomain.FriendlyName} <account> <character> {commandHandler.RegisteredCommandName()} {msg}")
+        : base($"Sai câu lệnh: .\\{AppDomain.CurrentDomain.FriendlyName} <account> <character> {commandHandler.RegisteredCommandName()} {msg}")
         {
         }
     }
