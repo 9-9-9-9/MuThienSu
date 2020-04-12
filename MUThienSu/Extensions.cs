@@ -17,16 +17,16 @@ namespace MUThienSu
 
         public static void Validate5Stats(this string[] args)
         {
-            if (args.Length != 4)
-                throw new ArgumentException($"Tham số '{nameof(args)}' yêu cầu 4 phần tử (str, agi, vit, ene)");
+            if (args.Length != 5)
+                throw new ArgumentException($"Tham số '{nameof(args)}' yêu cầu 5 phần tử (str, agi, vit, ene, cmd)");
 
             var name = new[]
             {
-                "str", "agi", "vit", "ene"
+                "str", "agi", "vit", "ene", "cmd"
             };
 
             var anyMinus1 = false;
-            for (var i = 0; i <= 3; i++)
+            for (var i = 0; i <= 4; i++)
             {
                 if (!int.TryParse(args[i], out var val))
                     throw new ArgumentException($"'{name[i]}' tại index {i.Index()} không thỏa mãn số integer");
