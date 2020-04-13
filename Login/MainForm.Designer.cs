@@ -37,9 +37,10 @@
             // 
             // cbbAccounts
             // 
-            this.cbbAccounts.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.cbbAccounts.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.cbbAccounts.DropDownHeight = 80;
+            this.cbbAccounts.DropDownHeight = 500;
             this.cbbAccounts.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbbAccounts.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cbbAccounts.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -61,7 +62,7 @@
             this.btnCopyPassword.Location = new System.Drawing.Point(39, 2);
             this.btnCopyPassword.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.btnCopyPassword.Name = "btnCopyPassword";
-            this.btnCopyPassword.Size = new System.Drawing.Size(34, 32);
+            this.btnCopyPassword.Size = new System.Drawing.Size(34, 39);
             this.btnCopyPassword.TabIndex = 3;
             this.btnCopyPassword.UseVisualStyleBackColor = true;
             this.btnCopyPassword.Click += new System.EventHandler(this.btnCopyPassword_Click);
@@ -76,7 +77,7 @@
             this.btnLogin.Location = new System.Drawing.Point(251, 2);
             this.btnLogin.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.btnLogin.Name = "btnLogin";
-            this.btnLogin.Size = new System.Drawing.Size(34, 32);
+            this.btnLogin.Size = new System.Drawing.Size(34, 39);
             this.btnLogin.TabIndex = 2;
             this.btnLogin.TabStop = false;
             this.btnLogin.UseVisualStyleBackColor = true;
@@ -92,7 +93,7 @@
             this.btnSetting.Location = new System.Drawing.Point(0, 2);
             this.btnSetting.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.btnSetting.Name = "btnSetting";
-            this.btnSetting.Size = new System.Drawing.Size(34, 32);
+            this.btnSetting.Size = new System.Drawing.Size(34, 39);
             this.btnSetting.TabIndex = 0;
             this.btnSetting.UseVisualStyleBackColor = true;
             this.btnSetting.Click += new System.EventHandler(this.btnSetting_Click);
@@ -103,7 +104,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(288, 61);
+            this.ClientSize = new System.Drawing.Size(288, 45);
             this.Controls.Add(this.btnCopyPassword);
             this.Controls.Add(this.btnLogin);
             this.Controls.Add(this.cbbAccounts);
@@ -114,7 +115,7 @@
             this.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(400, 100);
-            this.MinimumSize = new System.Drawing.Size(220, 100);
+            this.MinimumSize = new System.Drawing.Size(220, 84);
             this.Name = "MainForm";
             this.Text = "MU";
             this.Shown += new System.EventHandler(this.MainForm_Shown);

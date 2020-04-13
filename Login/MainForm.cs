@@ -47,12 +47,14 @@ namespace Login
 
         private void MainForm_Shown(object sender, EventArgs e)
         {
+#if !DEBUG
             if (!File.Exists("main.exe"))
             {
                 // ReSharper disable once LocalizableElement
                 MessageBox.Show("Bác cho file này vào thư mục MU Legend thì mới được nhé");
                 Environment.Exit(1);
             }
+#endif
 
             ToolTip toolTip1 = new ToolTip
             {
