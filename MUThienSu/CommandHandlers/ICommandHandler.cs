@@ -377,9 +377,9 @@ namespace MUThienSu.CommandHandlers
             return null;
         }
 
-        public static string RegisteredCommandName<T>(this T type) where T : ICommandHandler
+        public static string RegisteredCommandName<TClass>(this TClass clz) where TClass : ICommandHandler
         {
-            return typeof(T).RegisteredCommandName();
+            return clz.GetType().RegisteredCommandName();
         }
     }
 }
