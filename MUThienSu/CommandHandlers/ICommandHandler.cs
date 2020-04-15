@@ -265,7 +265,7 @@ namespace MUThienSu.CommandHandlers
             }
         }
 
-        private async Task<int> GetTotalRemainingPointAsync()
+        protected async Task<int> GetTotalRemainingPointAsync()
         {
             var client =
                 new RestClient("http://id.muthiensu.vn/losttower/index2.php?mod=char_manager&act=addpoint")
@@ -354,6 +354,32 @@ namespace MUThienSu.CommandHandlers
                 throw new ArgumentException($"Invalid level value '{lvl}'");
 
             return lvl;
+        }
+
+        protected async Task ResetPointAsync()
+        {
+            await Task.CompletedTask;
+            
+            Console.WriteLine(nameof(ResetPointAsync));
+
+            var client =
+                new RestClient("http://id.muthiensu.vn/losttower/index.php?mod=char_manager&act=resetpoint")
+                {
+                    Timeout = -1
+                };
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("Origin", "http://id.muthiensu.vn");
+            request.AddHeader("Content-Type", "application/x-www-form-urlencoded");
+            request.AddHeader("Referer", "http://id.muthiensu.vn/losttower/");
+            request.AddHeader("Cookie", $"PHPSESSID={SessionId}");
+            request.AddParameter("action", "resetpoint");
+            request.AddParameter("character", Character);
+            request.AddParameter("pass2", Password);
+            request.AddParameter("Submit", "");
+            
+            var restResponse = await client.ExecuteAsync(request);
+            if (restResponse.StatusCode != HttpStatusCode.OK)
+                throw new Exception($"Reset point thất bại, status {restResponse.StatusCode}");
         }
     }
 
