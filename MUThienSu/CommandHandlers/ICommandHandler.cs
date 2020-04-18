@@ -359,7 +359,7 @@ namespace MUThienSu.CommandHandlers
         protected async Task ResetPointAsync()
         {
             await Task.CompletedTask;
-            
+
             Console.WriteLine(nameof(ResetPointAsync));
 
             var client =
@@ -376,10 +376,36 @@ namespace MUThienSu.CommandHandlers
             request.AddParameter("character", Character);
             request.AddParameter("pass2", Password);
             request.AddParameter("Submit", "");
-            
+
             var restResponse = await client.ExecuteAsync(request);
             if (restResponse.StatusCode != HttpStatusCode.OK)
                 throw new Exception($"Reset point thất bại, status {restResponse.StatusCode}");
+        }
+
+        protected async Task ResetMasterAsync()
+        {
+            await Task.CompletedTask;
+
+            Console.WriteLine(nameof(ResetMasterAsync));
+
+            var client =
+                new RestClient("http://id.muthiensu.vn/losttower/index.php?mod=char_manager&act=rsmaster")
+                {
+                    Timeout = -1
+                };
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("Origin", "http://id.muthiensu.vn");
+            request.AddHeader("Content-Type", "application/x-www-form-urlencoded");
+            request.AddHeader("Referer", "http://id.muthiensu.vn/losttower/");
+            request.AddHeader("Cookie", $"PHPSESSID={SessionId}");
+            request.AddParameter("action", "rsmaster");
+            request.AddParameter("character", Character);
+            request.AddParameter("pass2", Password);
+            request.AddParameter("Submit", "");
+
+            var restResponse = await client.ExecuteAsync(request);
+            if (restResponse.StatusCode != HttpStatusCode.OK)
+                throw new Exception($"Reset master thất bại, status {restResponse.StatusCode}");
         }
     }
 

@@ -20,6 +20,7 @@ namespace MUThienSu
             Register<ResetNormalCommandHandler>();
             Register<AddPointCommandHandler>();
             Register<ResetPointCommandHandler>();
+            Register<ResetMasterCommandHandler>();
 
             if (args.Length < 3)
                 Exit("Yêu cầu tối thiểu 3 param: <account> <character name> <command-name> [others args]");
